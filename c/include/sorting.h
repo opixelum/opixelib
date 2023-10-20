@@ -1,7 +1,8 @@
 #ifndef SORTING_H
 #define SORTING_H
 
-#include "stdlib.h"
+#include <stdlib.h>
+#include "utils.h"
 
 /**
  * @brief Complexity: O(n^2)
