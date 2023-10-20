@@ -4,24 +4,26 @@ void insertion_sort(int *array, size_t size)
 {
     for (size_t i = 1; i < size; i++)
     {
-        int key = array[i];
-        int j = i - 1;
-        while (j >= 0 && array[j] > key)
+        int current_element = array[i];
+        int new_position = (int) i - 1;
+
+        while (new_position >= 0 && array[new_position] > current_element)
         {
-            array[j+1] = array[j];
-            j--;
+            array[new_position + 1] = array[new_position];
+            new_position--;
         }
-        array[j+1] = key;
+
+        array[new_position + 1] = current_element;
     }
 }
 
 void odd_even_sort(int *array, size_t size)
 {
-    int sorted = 0;
+    int is_sorted = 0;
 
-    while (!sorted)
+    while (!is_sorted)
     {
-        sorted = 1;
+        is_sorted = 1;
 
         // Even-odd phase
         for (size_t i = 0; i < size - 1; i += 2)
@@ -29,7 +31,7 @@ void odd_even_sort(int *array, size_t size)
             if (array[i] > array[i + 1])
             {
                 swap(&array[i], &array[i + 1], sizeof(int));
-                sorted = -1;
+                is_sorted = -1;
             }
         }
 
@@ -39,7 +41,7 @@ void odd_even_sort(int *array, size_t size)
             if (array[i] > array[i + 1])
             {
                 swap(&array[i], &array[i + 1], sizeof(int));
-                sorted = 0;
+                is_sorted = 0;
             }
         }
     }
