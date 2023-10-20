@@ -44,3 +44,25 @@ void odd_even_sort(int *array, size_t size)
         }
     }
 }
+
+void comb_sort(int *array, size_t size)
+{
+    unsigned char is_sorted = 0;
+    size_t gap = size;
+
+    while (gap > 1 || !is_sorted)
+    {
+        is_sorted = 1;
+        gap = (size_t) ((double) gap / 1.3);
+        if (gap < 1) gap = 1;
+
+        for (int i = 0; i < size - gap; i++)
+        {
+            if (array[i] > array[i + gap])
+            {
+                swap(&array[i], &array[i + gap], sizeof(array[i]));
+                is_sorted = 0;
+            }
+        }
+    }
+}
