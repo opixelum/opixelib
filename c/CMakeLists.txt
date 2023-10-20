@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.26.4)
+project(opixelib VERSION 0.1.0 LANGUAGES C)
+file(GLOB SOURCES  "src/*.c")
+add_executable(opixelib ${SOURCES})
+target_include_directories(opixelib PRIVATE include)
