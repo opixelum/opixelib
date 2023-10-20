@@ -5,3 +5,6 @@
 # Compiled files
 **/build/
 **/cmake-build-debug/
+
+# Testing files
+**/main.c
