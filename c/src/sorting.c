@@ -30,7 +30,7 @@ void odd_even_sort(int *array, size_t size)
         {
             if (array[i] > array[i + 1])
             {
-                swap(&array[i], &array[i + 1], sizeof(int));
+                swap(&array[i], &array[i + 1], sizeof array[i]);
                 is_sorted = -1;
             }
         }
@@ -40,7 +40,7 @@ void odd_even_sort(int *array, size_t size)
         {
             if (array[i] > array[i + 1])
             {
-                swap(&array[i], &array[i + 1], sizeof(int));
+                swap(&array[i], &array[i + 1], sizeof array[i]);
                 is_sorted = 0;
             }
         }
@@ -62,7 +62,7 @@ void comb_sort(int *array, size_t size)
         {
             if (array[i] > array[i + gap])
             {
-                swap(&array[i], &array[i + gap], sizeof(array[i]));
+                swap(&array[i], &array[i + gap], sizeof array[i]);
                 is_sorted = 0;
             }
         }
