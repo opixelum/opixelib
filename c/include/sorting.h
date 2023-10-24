@@ -5,39 +5,40 @@
 #include "utils.h"
 
 /**
- * @brief Simple sorting algorithm that builds the final sorted array one item
+ * @brief A simple sorting algorithm that builds the final sorted array one item
  * at a time by repeatedly picking one element and placing it at the correct
- * position. Complexity: O(n^2)
- * @param array Pointer to the array to be sorted
- * @param size Size of the array
- * @warning This function modifies the array
+ * position. The complexity of this algorithm is O(n^2).
+ * @param array A pointer to the array to be sorted.
+ * @param size The size of the array.
+ * @warning This function modifies the array.
  */
 void insertion_sort(int *array, size_t size);
 
 /**
- * @brief Variation of bubble sort where comparisons and swaps are performed on
- * alternating odd and even indexed elements. Complexity: O(n^2)
- * @param array Pointer to the array to be sorted
- * @param size Size of the array
- * @warning This function modifies the array
+ * @brief A variation of bubble sort where comparisons and swaps are performed
+ * on alternating odd and even indexed elements. The complexity of this
+ * algorithm is O(n^2).
+ * @param array A pointer to the array to be sorted.
+ * @param size The size of the array.
+ * @warning This function modifies the array.
  */
 void odd_even_sort(int *array, size_t size);
 
 /**
- * @brief Improved bubble sort that uses a gap sequence to remove turtles (small
- * values near the end). Complexity: O(n^2)
- * @param array Pointer to the array to be sorted
- * @param size Size of the array
- * @warning This function modifies the array
+ * @brief An improved bubble sort that uses a gap sequence to remove turtles
+ * (small values near the end). The complexity of this algorithm is O(n^2).
+ * @param array A pointer to the array to be sorted.
+ * @param size The size of the array.
+ * @warning This function modifies the array.
  */
 void comb_sort(int *array, size_t size);
 
 /**
- * @brief Optimization of bubble sort that sorts in both directions on each pass
- * through the list. Complexity: O(n^2)
- * @param array Pointer to the array to be sorted
- * @param size Size of the array
- * @warning This function modifies the array
+ * @brief An optimization of bubble sort that sorts in both directions on each
+ * pass through the list. The complexity of this algorithm is O(n^2).
+ * @param array A pointer to the array to be sorted.
+ * @param size The size of the array.
+ * @warning This function modifies the array.
  */
 void cocktail_sort(int *array, size_t size);
 
