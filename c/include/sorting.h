@@ -42,4 +42,14 @@ void comb_sort(int *array, size_t size);
  */
 void cocktail_sort(int *array, size_t size);
 
+/**
+ * @brief A divide and conquer algorithm that divides the array into two halves,
+ * sorts them and then merges the two sorted halves. The complexity of this
+ * algorithm is O(n log n).
+ * @param array A pointer to the array to be sorted.
+ * @param size The size of the array.
+ * @warning This function modifies the array.
+ */
+void merge_sort(int *array, size_t size);
+
 #endif // SORTING_H
