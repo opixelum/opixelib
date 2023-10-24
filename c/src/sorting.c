@@ -68,3 +68,31 @@ void comb_sort(int *array, size_t size)
         }
     }
 }
+
+void cocktail_sort(int *array, size_t size)
+{
+    unsigned char is_sorted = 0;
+
+    while (!is_sorted)
+    {
+        is_sorted = 1;
+
+        for (int i = 0; i < size - 2; i++)
+        {
+            if (array[i] > array[i + 1])
+            {
+                swap(&array[i], &array[i + 1], sizeof array[i]);
+                is_sorted = 0;
+            }
+        }
+
+        for (int i = size - 2; i >= 0; i--)
+        {
+            if (array[i] > array[i + 1])
+            {
+                swap(&array[i], &array[i + 1], sizeof array[i]);
+                is_sorted = 0;
+            }
+        }
+    }
+}
