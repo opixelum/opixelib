@@ -18,36 +18,41 @@ pub fn insertion_sort<T: PartialOrd + Clone>(array: &mut [T]) {
 mod tests {
     use super::*;
 
+    // Define your unsorted test data as static arrays or slices
+    static INT_ARRAY: [i32; 9] = [7, 3, 9, 1, 5, 4, 2, 8, 6];
+    static FLOAT_ARRAY: [f64; 4] = [3.14, 2.71, 1.41, 1.73];
+    static CHAR_ARRAY: [char; 4] = ['d', 'a', 'c', 'b'];
+    static STRING_SLICE_ARRAY: [&str; 4] = ["john", "alex", "chris", "ben"];
+    static STRING_ARRAY: [&str; 4] = ["o'neil", "johnson", "hilton", "doe"];
+
+    // Define your sorted test data
+    static SORTED_INT_ARRAY: [i32; 9] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    static SORTED_FLOAT_ARRAY: [f64; 4] = [1.41, 1.73, 2.71, 3.14];
+    static SORTED_CHAR_ARRAY: [char; 4] = ['a', 'b', 'c', 'd'];
+    static SORTED_STRING_SLICE_ARRAY: [&str; 4] = ["alex", "ben", "chris", "john"];
+    static SORTED_STRING_ARRAY: [&str; 4] = ["doe", "hilton", "johnson", "o'neil"];
+
     #[test]
     fn test_insertion_sort() {
-        let mut int_array = [7, 3, 9, 1, 5, 4, 2, 8, 6];
+        let mut int_array = INT_ARRAY;
         insertion_sort(&mut int_array);
-        assert_eq!(int_array, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        assert_eq!(int_array, SORTED_INT_ARRAY);
 
-        let mut float_array = [3.14, 2.71, 1.41, 1.73];
+        let mut float_array = FLOAT_ARRAY;
         insertion_sort(&mut float_array);
-        assert_eq!(float_array, [1.41, 1.73, 2.71, 3.14]);
+        assert_eq!(float_array, SORTED_FLOAT_ARRAY);
 
-        let mut char_array = ['d', 'a', 'c', 'b'];
+        let mut char_array = CHAR_ARRAY;
         insertion_sort(&mut char_array);
-        assert_eq!(char_array, ['a', 'b', 'c', 'd']);
+        assert_eq!(char_array, SORTED_CHAR_ARRAY);
 
-        let mut string_array = ["john", "alex", "chris", "ben"];
-        insertion_sort(&mut string_array);
-        assert_eq!(string_array, ["alex", "ben", "chris", "john"]);
+        let mut string_slice_array = STRING_SLICE_ARRAY;
+        insertion_sort(&mut string_slice_array);
+        assert_eq!(string_slice_array, SORTED_STRING_SLICE_ARRAY);
 
-        let mut string_array = [
-            String::from("doe"),
-            String::from("johnson"),
-            String::from("o'neil"),
-            String::from("hilton")
-        ];
+        let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
         insertion_sort(&mut string_array);
-        assert_eq!(string_array, [
-            String::from("doe"),
-            String::from("hilton"),
-            String::from("johnson"),
-            String::from("o'neil")
-        ]);
+        let sorted_string_array: Vec<String> = SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        assert_eq!(string_array, sorted_string_array);
     }
 }
