@@ -52,7 +52,8 @@ mod tests {
 
         let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
         insertion_sort(&mut string_array);
-        let sorted_string_array: Vec<String> = SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        let sorted_string_array: Vec<String> =
+            SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
         assert_eq!(string_array, sorted_string_array);
     }
 }
