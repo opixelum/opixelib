@@ -1,12 +1,12 @@
-pub fn insertion_sort<T: PartialOrd + Copy>(array: &mut [T]) {
+pub fn insertion_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     let size = array.len();
 
     for i in 1..size {
-        let current_element = array[i];
+        let current_element = array[i].clone();
         let mut new_position = i as isize - 1;
 
         while new_position >= 0 && array[new_position as usize] > current_element {
-            array[(new_position + 1) as usize] = array[new_position as usize];
+            array[(new_position + 1) as usize] = array[new_position as usize].clone();
             new_position -= 1;
         }
 
@@ -31,5 +31,23 @@ mod tests {
         let mut char_array = ['d', 'a', 'c', 'b'];
         insertion_sort(&mut char_array);
         assert_eq!(char_array, ['a', 'b', 'c', 'd']);
+
+        let mut string_array = ["john", "alex", "chris", "ben"];
+        insertion_sort(&mut string_array);
+        assert_eq!(string_array, ["alex", "ben", "chris", "john"]);
+
+        let mut string_array = [
+            String::from("doe"),
+            String::from("johnson"),
+            String::from("o'neil"),
+            String::from("hilton")
+        ];
+        insertion_sort(&mut string_array);
+        assert_eq!(string_array, [
+            String::from("doe"),
+            String::from("hilton"),
+            String::from("johnson"),
+            String::from("o'neil")
+        ]);
     }
 }
