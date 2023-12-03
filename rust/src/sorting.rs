@@ -14,6 +14,31 @@ pub fn insertion_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     }
 }
 
+pub fn odd_even_sort<T: PartialOrd + Clone>(array: &mut [T]) {
+    let size = array.len();
+    let mut is_sorted = false;
+
+    while !is_sorted {
+        is_sorted = true;
+
+        // Even-odd phase
+        for i in (0..size - 1).step_by(2) {
+            if array[i] > array[i + 1] {
+                array.swap(i, i + 1);
+                is_sorted = false;
+            }
+        }
+
+        // Odd-even phase
+        for i in (1..size - 1).step_by(2) {
+            if array[i] > array[i + 1] {
+                array.swap(i, i + 1);
+                is_sorted = false;
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -52,6 +77,31 @@ mod tests {
 
         let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
         insertion_sort(&mut string_array);
+        let sorted_string_array: Vec<String> =
+            SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        assert_eq!(string_array, sorted_string_array);
+    }
+
+    #[test]
+    fn test_odd_even_sort() {
+        let mut int_array = INT_ARRAY;
+        odd_even_sort(&mut int_array);
+        assert_eq!(int_array, SORTED_INT_ARRAY);
+
+        let mut float_array = FLOAT_ARRAY;
+        odd_even_sort(&mut float_array);
+        assert_eq!(float_array, SORTED_FLOAT_ARRAY);
+
+        let mut char_array = CHAR_ARRAY;
+        odd_even_sort(&mut char_array);
+        assert_eq!(char_array, SORTED_CHAR_ARRAY);
+
+        let mut string_slice_array = STRING_SLICE_ARRAY;
+        odd_even_sort(&mut string_slice_array);
+        assert_eq!(string_slice_array, SORTED_STRING_SLICE_ARRAY);
+
+        let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        odd_even_sort(&mut string_array);
         let sorted_string_array: Vec<String> =
             SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
         assert_eq!(string_array, sorted_string_array);
