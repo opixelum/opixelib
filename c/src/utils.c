@@ -2,10 +2,16 @@
 
 void swap(void *a, void *b, size_t size)
 {
-    char temp[size];
+    char *temp = malloc(size * sizeof *temp);
+    if (!temp)
+    {
+        fprintf(stderr, "ERROR: utils: swap: malloc failed\n");
+        exit(EXIT_FAILURE);
+    }
     memcpy(temp, a, size);
     memcpy(a, b, size);
     memcpy(b, temp, size);
+    free(temp);
 }
 
 int *merge_sorted_array
