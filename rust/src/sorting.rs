@@ -16,16 +16,16 @@ pub fn insertion_sort<T: PartialOrd + Clone>(array: &mut [T]) {
 
 pub fn odd_even_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     let size = array.len();
-    let mut is_sorted = false;
+    let mut sorted = false;
 
-    while !is_sorted {
-        is_sorted = true;
+    while !sorted {
+        sorted = true;
 
         // Even-odd phase
         for i in (0..size - 1).step_by(2) {
             if array[i] > array[i + 1] {
                 array.swap(i, i + 1);
-                is_sorted = false;
+                sorted = false;
             }
         }
 
@@ -33,18 +33,18 @@ pub fn odd_even_sort<T: PartialOrd + Clone>(array: &mut [T]) {
         for i in (1..size - 1).step_by(2) {
             if array[i] > array[i + 1] {
                 array.swap(i, i + 1);
-                is_sorted = false;
+                sorted = false;
             }
         }
     }
 }
 
 pub fn comb_sort<T: PartialOrd + Clone>(array: &mut [T]) {
-    let mut is_sorted = false;
+    let mut sorted = false;
     let mut gap: f64 = array.len() as f64;
 
-    while gap > 1.0 || !is_sorted {
-        is_sorted = true;
+    while gap > 1.0 || !sorted {
+        sorted = true;
         gap /= 1.3;
         if gap < 1.0 {
             gap = 1.0;
@@ -53,7 +53,7 @@ pub fn comb_sort<T: PartialOrd + Clone>(array: &mut [T]) {
         for i in 0..array.len() - gap as usize {
             if array[i] > array[i + gap as usize] {
                 array.swap(i, i + gap as usize);
-                is_sorted = false
+                sorted = false
             }
         }
     }
