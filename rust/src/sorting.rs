@@ -43,8 +43,7 @@ pub fn comb_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     let mut is_sorted = false;
     let mut gap: f64 = array.len() as f64;
 
-    while gap > 1.0 || !is_sorted
-    {
+    while gap > 1.0 || !is_sorted {
         is_sorted = true;
         gap /= 1.3;
         if gap < 1.0 {
