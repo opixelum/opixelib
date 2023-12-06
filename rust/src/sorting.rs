@@ -60,6 +60,28 @@ pub fn comb_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     }
 }
 
+pub fn cocktail_sort<T: PartialOrd + Clone>(array: &mut [T]) {
+    let mut sorted = false;
+
+    while !sorted {
+        sorted = true;
+
+        for i in 0..array.len() - 1 {
+            if array[i] > array[i + 1] {
+                array.swap(i, i + 1);
+                sorted = false;
+            }
+        }
+
+        for i in (array.len() - 1..=0).rev() {
+            if array[i] > array[i + 1] {
+                array.swap(i, i + 1);
+                sorted = false;
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -148,6 +170,31 @@ mod tests {
 
         let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
         comb_sort(&mut string_array);
+        let sorted_string_array: Vec<String> =
+            SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        assert_eq!(string_array, sorted_string_array);
+    }
+
+    #[test]
+    fn test_cocktail_sort() {
+        let mut int_array = INT_ARRAY;
+        cocktail_sort(&mut int_array);
+        assert_eq!(int_array, SORTED_INT_ARRAY);
+
+        let mut float_array = FLOAT_ARRAY;
+        cocktail_sort(&mut float_array);
+        assert_eq!(float_array, SORTED_FLOAT_ARRAY);
+
+        let mut char_array = CHAR_ARRAY;
+        cocktail_sort(&mut char_array);
+        assert_eq!(char_array, SORTED_CHAR_ARRAY);
+
+        let mut string_slice_array = STRING_SLICE_ARRAY;
+        cocktail_sort(&mut string_slice_array);
+        assert_eq!(string_slice_array, SORTED_STRING_SLICE_ARRAY);
+
+        let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        cocktail_sort(&mut string_array);
         let sorted_string_array: Vec<String> =
             SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
         assert_eq!(string_array, sorted_string_array);
