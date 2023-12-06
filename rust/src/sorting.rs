@@ -39,6 +39,27 @@ pub fn odd_even_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     }
 }
 
+pub fn comb_sort<T: PartialOrd + Clone>(array: &mut [T]) {
+    let mut is_sorted = false;
+    let mut gap: f64 = array.len() as f64;
+
+    while gap > 1.0 || !is_sorted
+    {
+        is_sorted = true;
+        gap /= 1.3;
+        if gap < 1.0 {
+            gap = 1.0;
+        }
+
+        for i in 0..array.len() - gap as usize {
+            if array[i] > array[i + gap as usize] {
+                array.swap(i, i + gap as usize);
+                is_sorted = false
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -102,6 +123,31 @@ mod tests {
 
         let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
         odd_even_sort(&mut string_array);
+        let sorted_string_array: Vec<String> =
+            SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        assert_eq!(string_array, sorted_string_array);
+    }
+
+    #[test]
+    fn test_comb_sort() {
+        let mut int_array = INT_ARRAY;
+        comb_sort(&mut int_array);
+        assert_eq!(int_array, SORTED_INT_ARRAY);
+
+        let mut float_array = FLOAT_ARRAY;
+        comb_sort(&mut float_array);
+        assert_eq!(float_array, SORTED_FLOAT_ARRAY);
+
+        let mut char_array = CHAR_ARRAY;
+        comb_sort(&mut char_array);
+        assert_eq!(char_array, SORTED_CHAR_ARRAY);
+
+        let mut string_slice_array = STRING_SLICE_ARRAY;
+        comb_sort(&mut string_slice_array);
+        assert_eq!(string_slice_array, SORTED_STRING_SLICE_ARRAY);
+
+        let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        comb_sort(&mut string_array);
         let sorted_string_array: Vec<String> =
             SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
         assert_eq!(string_array, sorted_string_array);
