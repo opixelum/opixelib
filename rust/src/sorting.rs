@@ -1,3 +1,5 @@
+use crate::arrays::{copy_arrays, merge_arrays};
+
 pub fn insertion_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     let size = array.len();
 
@@ -78,6 +80,22 @@ pub fn cocktail_sort<T: PartialOrd + Clone>(array: &mut [T]) {
                 sorted = false;
             }
         }
+    }
+}
+
+pub fn merge_sort<T: PartialOrd + Clone>(array: &mut [T]) {
+    let len = array.len();
+    if len > 1 {
+        let middle = array.len() / 2;
+        let (left, right) = array.split_at_mut(middle);
+
+        merge_sort(left);
+        merge_sort(right);
+
+        let mut temp = vec![left[0].clone(); len];
+        merge_arrays(left, right, &mut temp);
+
+        copy_arrays(&temp, array);
     }
 }
 
@@ -194,6 +212,31 @@ mod tests {
 
         let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
         cocktail_sort(&mut string_array);
+        let sorted_string_array: Vec<String> =
+            SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        assert_eq!(string_array, sorted_string_array);
+    }
+
+    #[test]
+    fn test_merge_sort() {
+        let mut int_array = INT_ARRAY;
+        merge_sort(&mut int_array);
+        assert_eq!(int_array, SORTED_INT_ARRAY);
+
+        let mut float_array = FLOAT_ARRAY;
+        merge_sort(&mut float_array);
+        assert_eq!(float_array, SORTED_FLOAT_ARRAY);
+
+        let mut char_array = CHAR_ARRAY;
+        merge_sort(&mut char_array);
+        assert_eq!(char_array, SORTED_CHAR_ARRAY);
+
+        let mut string_slice_array = STRING_SLICE_ARRAY;
+        merge_sort(&mut string_slice_array);
+        assert_eq!(string_slice_array, SORTED_STRING_SLICE_ARRAY);
+
+        let mut string_array: Vec<String> = STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        merge_sort(&mut string_array);
         let sorted_string_array: Vec<String> =
             SORTED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
         assert_eq!(string_array, sorted_string_array);
