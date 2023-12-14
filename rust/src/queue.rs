@@ -2,7 +2,7 @@ pub struct Queue<T> {
     items: Vec<T>,
     start: usize,
     size: usize,
-    capacity: usize
+    capacity: usize,
 }
 
 impl<T> Queue<T> {
@@ -24,14 +24,14 @@ mod tests {
         items: Vec::new(),
         start: 0,
         size: 0,
-        capacity: 1
+        capacity: 1,
     };
 
     static FULL_INT_QUEUE: Lazy<Queue<i8>> = Lazy::new(|| Queue {
         items: vec![0],
         start: 0,
         size: 1,
-        capacity: 1
+        capacity: 1,
     });
 
     #[test]
