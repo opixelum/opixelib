@@ -16,7 +16,7 @@ impl<T> Queue<T> {
     }
 
     pub fn enqueue(&mut self, value: T) -> Result<usize, &str> {
-        if self.is_full() {Err("Queue is full.")}
+        if self.is_full() {Err("Queue is full")}
         else {
             let index = (self.start + self.size) % self.capacity;
             self.items[index] = value;
@@ -88,5 +88,7 @@ mod tests {
         };
         assert_eq!(queue.enqueue(1), Ok(0));
         assert_eq!(queue, expected_result);
+
+        assert_eq!(queue.enqueue(1), Err("Queue is full"));
     }
 }
