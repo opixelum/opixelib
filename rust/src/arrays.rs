@@ -33,6 +33,12 @@ pub fn copy_arrays<T: Clone>(from: &[T], to: &mut [T]) {
     }
 }
 
+pub fn invert_array<T>(array: &mut [T]) {
+    for i in 0..(array.len() / 2) {
+        array.swap(i, array.len() - 1 - i);
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -113,5 +119,35 @@ mod tests {
             MERGED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
         copy_arrays(&merged_string_array, &mut to);
         assert_eq!(merged_string_array, to);
+    }
+
+    #[test]
+    fn test_invert_array() {
+        let mut inverted_int = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+        invert_array(&mut inverted_int);
+        assert_eq!(inverted_int, MERGED_INT_ARRAY);
+
+        let mut inverted_float = [6.6, 5.5, 4.4, 3.3, 2.2, 1.1];
+        invert_array(&mut inverted_float);
+        assert_eq!(inverted_float, MERGED_FLOAT_ARRAY);
+
+        let mut inverted_char = ['d', 'c', 'b', 'a'];
+        invert_array(&mut inverted_char);
+        assert_eq!(inverted_char, MERGED_CHAR_ARRAY);
+
+        let mut inverted_string_slice = ["delta", "gamma", "beta", "alpha"];
+        invert_array(&mut inverted_string_slice);
+        assert_eq!(inverted_string_slice, MERGED_STRING_SLICE_ARRAY);
+
+        let mut inverted_string = vec![
+            String::from("o'neil"),
+            String::from("johnson"),
+            String::from("hilton"),
+            String::from("doe")
+        ];
+        let merged_string: Vec<String> =
+            MERGED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        invert_array(&mut inverted_string);
+        assert_eq!(inverted_string, merged_string);
     }
 }
