@@ -143,10 +143,9 @@ mod tests {
             String::from("o'neil"),
             String::from("johnson"),
             String::from("hilton"),
-            String::from("doe")
+            String::from("doe"),
         ];
-        let merged_string: Vec<String> =
-            MERGED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
+        let merged_string: Vec<String> = MERGED_STRING_ARRAY.iter().map(|&s| s.into()).collect();
         invert_array(&mut inverted_string);
         assert_eq!(inverted_string, merged_string);
     }

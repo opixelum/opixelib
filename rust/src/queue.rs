@@ -16,8 +16,9 @@ impl<T> Queue<T> {
     }
 
     pub fn enqueue(&mut self, value: T) -> Result<usize, &str> {
-        if self.is_full() {Err("Unable to enqueue a full queue")}
-        else {
+        if self.is_full() {
+            Err("Unable to enqueue a full queue")
+        } else {
             let index = (self.start + self.size) % self.capacity;
             self.items[index] = value;
             self.size += 1;
@@ -26,8 +27,9 @@ impl<T> Queue<T> {
     }
 
     pub fn dequeue(&mut self) -> Result<&T, &str> {
-        if self.is_empty() {Err("Unable to dequeue an empty queue")}
-        else {
+        if self.is_empty() {
+            Err("Unable to dequeue an empty queue")
+        } else {
             let dequeued_item = &self.items[self.start];
             self.start = (self.start + 1) % self.capacity;
             self.size -= 1;
