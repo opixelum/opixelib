@@ -1,3 +1,5 @@
+use num_traits::cast::NumCast;
+use std::ops::Div;
 use std::ops::{Add, AddAssign, Mul};
 
 pub fn pairwise_operation<T, F>(a: &[T], b: &[T], mut operator: F) -> Vec<Vec<T>>
@@ -42,6 +44,17 @@ where
     diagonal_operation(&mut outer_product, |a, b| a + b)
 }
 
+pub fn average<T>(values: &[T]) -> T
+where
+    T: Mul<Output = T> + Add<Output = T> + AddAssign + Clone + Default + Div<Output = T> + NumCast,
+{
+    let mut sum: T = T::default();
+    for value in values {
+        sum += value.clone();
+    }
+    sum / NumCast::from(values.len()).unwrap()
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -54,5 +67,13 @@ mod test {
             convolution(&[0.0, 1.0, 0.5], &[1.0, -1.0]),
             [0.0, 1.0, -0.5, -0.5]
         );
+    }
+
+    #[test]
+    fn test_average() {
+        assert_eq!(average(&[1, 2, 3]), 2);
+        assert_eq!(average(&[1.0, 1.0, 1.0]), 1.0);
+        assert_eq!(average(&[0, 20]), 10);
+        assert_eq!(average(&[-10.0, 10.0]), 0.0);
     }
 }
