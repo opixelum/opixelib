@@ -1,6 +1,5 @@
 use num_traits::cast::NumCast;
-use std::ops::Div;
-use std::ops::{Add, AddAssign, Mul};
+use std::ops::{Add, AddAssign, Div, Mul};
 
 pub fn pairwise_operation<T, F>(a: &[T], b: &[T], mut operator: F) -> Vec<Vec<T>>
 where
