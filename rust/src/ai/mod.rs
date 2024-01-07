@@ -1,2 +1,3 @@
 pub mod activation;
-mod layers;
+pub mod layers;
+pub mod tensors;
