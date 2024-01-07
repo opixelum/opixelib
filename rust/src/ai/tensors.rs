@@ -4,8 +4,8 @@ pub struct Tensor1D<T> {
 }
 
 impl<T> Tensor1D<T>
-    where
-        T: Default + Clone,
+where
+    T: Default + Clone,
 {
     fn new(length: usize) -> Self {
         Tensor1D {
@@ -26,8 +26,8 @@ pub struct Tensor2D<T> {
 }
 
 impl<T> Tensor2D<T>
-    where
-        T: Default + Clone,
+where
+    T: Default + Clone,
 {
     fn new(rows: usize, columns: usize) -> Self {
         Tensor2D {
@@ -51,8 +51,8 @@ pub struct Tensor3D<T> {
 }
 
 impl<T> Tensor3D<T>
-    where
-        T: Default + Clone,
+where
+    T: Default + Clone,
 {
     fn new(depth: usize, rows: usize, columns: usize) -> Self {
         Tensor3D {
