@@ -13,6 +13,10 @@ where
             length,
         }
     }
+
+    fn set(&mut self, index: usize, value: T) {
+        self.data[index] = value;
+    }
 }
 
 pub struct Tensor2D<T> {
@@ -31,6 +35,11 @@ where
             rows,
             columns,
         }
+    }
+
+    fn set(&mut self, row: usize, column: usize, value: T) {
+        let index = row * self.columns + column;
+        self.data[index] = value;
     }
 }
 
@@ -52,5 +61,10 @@ where
             rows,
             columns,
         }
+    }
+
+    fn set(&mut self, depth: usize, row: usize, column: usize, value: T) {
+        let index = depth * self.rows * self.columns + row * self.columns + column;
+        self.data[index] = value;
     }
 }
