@@ -1,118 +1,47 @@
-pub struct Tensor1D<T> {
+pub struct Tensor<T> {
     data: Vec<T>,
-    length: usize,
+    shape: Vec<usize>,
 }
 
-impl<T> Tensor1D<T>
+impl<T> Tensor<T>
 where
     T: Default + Clone,
 {
-    fn new(length: usize) -> Self {
-        Tensor1D {
-            data: vec![T::default(); length],
-            length,
-        }
-    }
-
-    fn set(&mut self, index: usize, value: T) -> Result<&mut Tensor1D<T>, &str> {
-        if index < self.length {
-            self.data[index] = value;
-            Ok(self)
-        } else {
-            Err("ERROR: Tensor1D: set(): wrong index")
-        }
-    }
-
-    fn get(&self, index: usize) -> Option<T> {
-        if index < self.length {
-            self.data.get(index).cloned()
-        } else {
-            None
+    pub fn new(shape: Vec<usize>) -> Tensor<T> {
+        let total_size = shape.iter().product();
+        Tensor {
+            data: vec![T::default(); total_size],
+            shape,
         }
     }
 }
 
-pub struct Tensor2D<T> {
-    data: Vec<T>,
-    rows: usize,
-    columns: usize,
-}
-
-impl<T> Tensor2D<T>
-where
-    T: Default + Clone,
-{
-    fn new(rows: usize, columns: usize) -> Self {
-        Tensor2D {
-            data: vec![T::default(); rows * columns],
-            rows,
-            columns,
+impl<T> Tensor<T> {
+    fn calculate_index(&self, indices: &[usize]) -> Option<usize> {
+        if indices.len() != self.shape.len() {
+            return None;
         }
+        let mut index = 0;
+        let mut multiplier = 1;
+        for (i, &dim_index) in indices.iter().rev().enumerate() {
+            if dim_index >= self.shape[self.shape.len() - 1 - i] {
+                return None;
+            }
+            index += dim_index * multiplier;
+            multiplier *= self.shape[self.shape.len() - 1 - i];
+        }
+        Some(index)
     }
 
-    fn set(&mut self, row: usize, column: usize, value: T) -> Result<&mut Tensor2D<T>, &str> {
-        if row < self.rows && column < self.columns {
-            let index = row * self.columns + column;
-            self.data[index] = value;
-            Ok(self)
-        } else {
-            Err("ERROR: Tensor2D: set(): wrong index")
-        }
+    pub fn get(&self, indices: &[usize]) -> Option<&T> {
+        let index = self.calculate_index(indices)?;
+        self.data.get(index)
     }
 
-    fn get(&self, row: usize, column: usize) -> Option<T> {
-        if row < self.rows && column < self.columns {
-            self.data.get(row * self.columns + column).cloned()
-        } else {
-            None
-        }
-    }
-}
-
-pub struct Tensor3D<T> {
-    data: Vec<T>,
-    depth: usize,
-    rows: usize,
-    columns: usize,
-}
-
-impl<T> Tensor3D<T>
-where
-    T: Default + Clone,
-{
-    fn new(depth: usize, rows: usize, columns: usize) -> Self {
-        Tensor3D {
-            data: vec![T::default(); depth * rows * columns],
-            depth,
-            rows,
-            columns,
-        }
-    }
-
-    fn set(
-        &mut self,
-        depth: usize,
-        row: usize,
-        column: usize,
-        value: T,
-    ) -> Result<&mut Tensor3D<T>, &str> {
-        if depth < self.depth && row < self.rows && column < self.columns {
-            let index = depth * self.rows * self.columns + row * self.columns + column;
-            self.data[index] = value;
-            Ok(self)
-        } else {
-            Err("ERROR: Tensor3D: set(): wrong index")
-        }
-    }
-
-    fn get(&self, depth: usize, row: usize, column: usize) -> Option<T> {
-        if depth < self.depth && row < self.rows && column < self.columns {
-            self.data
-                .get(depth * self.rows * self.columns + row * self.columns + column)
-                .cloned()
-        } else {
-            None
-        }
+    pub fn set(&mut self, indices: &[usize], value: T) -> Result<(), &'static str> {
+        let index = self.calculate_index(indices).ok_or("Invalid indices")?;
+        self.data[index] = value;
+        Ok(())
     }
 }
 
@@ -122,58 +51,49 @@ mod tests {
 
     #[test]
     fn test_new_tensors() {
-        let tensor: Tensor1D<u8> = Tensor1D::new(2);
-        assert_eq!(tensor.data, vec![0, 0]);
-        assert_eq!(tensor.length, 2);
+        let tensor_1d: Tensor<u8> = Tensor::new(vec![3]);
+        assert_eq!(tensor_1d.data, vec![0, 0, 0]);
+        assert_eq!(tensor_1d.shape, vec![3]);
 
-        let tensor: Tensor2D<u8> = Tensor2D::new(2, 2);
-        assert_eq!(tensor.data, vec![0, 0, 0, 0]);
-        assert_eq!(tensor.rows, 2);
-        assert_eq!(tensor.columns, 2);
+        let tensor_2d: Tensor<u8> = Tensor::new(vec![2, 3]);
+        assert_eq!(tensor_2d.data, vec![0, 0, 0, 0, 0, 0]);
+        assert_eq!(tensor_2d.shape, vec![2, 3]);
 
-        let tensor: Tensor3D<u8> = Tensor3D::new(2, 2, 2);
-        assert_eq!(tensor.data, vec![0, 0, 0, 0, 0, 0, 0, 0]);
-        assert_eq!(tensor.depth, 2);
-        assert_eq!(tensor.rows, 2);
-        assert_eq!(tensor.columns, 2);
+        let tensor_3d: Tensor<u8> = Tensor::new(vec![2, 2, 2]);
+        assert_eq!(tensor_3d.data, vec![0, 0, 0, 0, 0, 0, 0, 0]);
+        assert_eq!(tensor_3d.shape, vec![2, 2, 2]);
     }
 
     #[test]
-    fn test_set_tensors() {
-        let mut tensor: Tensor1D<u8> = Tensor1D::new(2);
-        assert_eq!(tensor.set(1, 1).unwrap().data, vec![0, 1]);
-        assert!(tensor.set(2, 1).is_err());
-        assert_eq!(tensor.data, vec![0, 1]);
-        assert_eq!(tensor.length, 2);
+    fn test_calculate_index_tensors() {
+        let tensor_1d = Tensor::<u8>::new(vec![3]);
+        assert_eq!(tensor_1d.calculate_index(&[2]), Some(2));
+        assert_eq!(tensor_1d.calculate_index(&[3]), None); // Out of bounds
 
-        let mut tensor: Tensor2D<u8> = Tensor2D::new(2, 2);
-        assert_eq!(tensor.set(1, 1, 1).unwrap().data, vec![0, 0, 0, 1]);
-        assert!(tensor.set(2, 1, 1).is_err());
-        assert_eq!(tensor.data, vec![0, 0, 0, 1]);
-        assert_eq!(tensor.rows, 2);
-        assert_eq!(tensor.columns, 2);
+        let tensor_2d = Tensor::<u8>::new(vec![2, 3]);
+        assert_eq!(tensor_2d.calculate_index(&[1, 2]), Some(5));
+        assert_eq!(tensor_2d.calculate_index(&[2, 2]), None); // Out of bounds
 
-        let mut tensor: Tensor3D<u8> = Tensor3D::new(2, 2, 2);
-        assert_eq!(
-            tensor.set(1, 1, 1, 1).unwrap().data,
-            vec![0, 0, 0, 0, 0, 0, 0, 1]
-        );
-        assert!(tensor.set(2, 1, 1, 1).is_err());
-        assert_eq!(tensor.data, vec![0, 0, 0, 0, 0, 0, 0, 1]);
-        assert_eq!(tensor.depth, 2);
-        assert_eq!(tensor.rows, 2);
-        assert_eq!(tensor.columns, 2);
+        let tensor_3d = Tensor::<u8>::new(vec![2, 2, 2]);
+        assert_eq!(tensor_3d.calculate_index(&[1, 1, 1]), Some(7));
+        assert_eq!(tensor_3d.calculate_index(&[2, 2, 2]), None); // Out of bounds
     }
 
     #[test]
-    fn test_get_tensors() {
-        let mut tensor: Tensor1D<u8> = Tensor1D::new(2);
-        assert_eq!(tensor.set(1, 1).unwrap().get(1).unwrap(), 1);
+    fn test_set_get_tensors() {
+        let mut tensor_1d = Tensor::<u8>::new(vec![3]);
+        assert!(tensor_1d.set(&[1], 5).is_ok());
+        assert_eq!(tensor_1d.get(&[1]), Some(&5));
+        assert!(tensor_1d.set(&[3], 6).is_err()); // Out of bounds
 
-        let mut tensor: Tensor2D<u8> = Tensor2D::new(2, 2);
-        assert_eq!(tensor.set(1, 1, 1).unwrap().get(1, 1).unwrap(), 1);
+        let mut tensor_2d = Tensor::<u8>::new(vec![2, 3]);
+        assert!(tensor_2d.set(&[0, 2], 7).is_ok());
+        assert_eq!(tensor_2d.get(&[0, 2]), Some(&7));
+        assert!(tensor_2d.set(&[2, 2], 8).is_err()); // Out of bounds
 
-        let mut tensor: Tensor3D<u8> = Tensor3D::new(2, 2, 2);
-        assert_eq!(tensor.set(1, 1, 1, 1).unwrap().get(1, 1, 1).unwrap(), 1);
+        let mut tensor_3d = Tensor::<u8>::new(vec![2, 2, 2]);
+        assert!(tensor_3d.set(&[1, 1, 1], 9).is_ok());
+        assert_eq!(tensor_3d.get(&[1, 1, 1]), Some(&9));
+        assert!(tensor_3d.set(&[2, 2, 2], 10).is_err()); // Out of bounds
     }
 }
