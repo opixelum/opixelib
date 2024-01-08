@@ -23,9 +23,9 @@ where
         }
     }
 
-    fn get(&self, index: usize) -> Option<&T> {
+    fn get(&self, index: usize) -> Option<T> {
         if index < self.length {
-            self.data.get(index)
+            self.data.get(index).cloned()
         } else {
             None
         }
@@ -60,9 +60,9 @@ where
         }
     }
 
-    fn get(&self, row: usize, column: usize) -> Option<&T> {
+    fn get(&self, row: usize, column: usize) -> Option<T> {
         if row < self.rows && column < self.columns {
-            self.data.get(row * self.columns + column)
+            self.data.get(row * self.columns + column).cloned()
         } else {
             None
         }
@@ -105,10 +105,11 @@ where
         }
     }
 
-    fn get(&self, depth: usize, row: usize, column: usize) -> Option<&T> {
+    fn get(&self, depth: usize, row: usize, column: usize) -> Option<T> {
         if depth < self.depth && row < self.rows && column < self.columns {
             self.data
                 .get(depth * self.rows * self.columns + row * self.columns + column)
+                .cloned()
         } else {
             None
         }
@@ -162,5 +163,17 @@ mod tests {
         assert_eq!(tensor.depth, 2);
         assert_eq!(tensor.rows, 2);
         assert_eq!(tensor.columns, 2);
+    }
+
+    #[test]
+    fn test_get_tensors() {
+        let mut tensor: Tensor1D<u8> = Tensor1D::new(2);
+        assert_eq!(tensor.set(1, 1).unwrap().get(1).unwrap(), 1);
+
+        let mut tensor: Tensor2D<u8> = Tensor2D::new(2, 2);
+        assert_eq!(tensor.set(1, 1, 1).unwrap().get(1, 1).unwrap(), 1);
+
+        let mut tensor: Tensor3D<u8> = Tensor3D::new(2, 2, 2);
+        assert_eq!(tensor.set(1, 1, 1, 1).unwrap().get(1, 1, 1).unwrap(), 1);
     }
 }
