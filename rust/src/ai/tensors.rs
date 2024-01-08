@@ -17,6 +17,14 @@ where
     fn set(&mut self, index: usize, value: T) {
         self.data[index] = value;
     }
+
+    fn get(&self, index: usize) -> Option<&T> {
+        if index < self.length {
+            self.data.get(index)
+        } else {
+            None
+        }
+    }
 }
 
 pub struct Tensor2D<T> {
@@ -40,6 +48,14 @@ where
     fn set(&mut self, row: usize, column: usize, value: T) {
         let index = row * self.columns + column;
         self.data[index] = value;
+    }
+
+    fn get(&self, row: usize, column: usize) -> Option<&T> {
+        if row < self.rows && column < self.columns {
+            self.data.get(row * self.columns + column)
+        } else {
+            None
+        }
     }
 }
 
@@ -66,5 +82,13 @@ where
     fn set(&mut self, depth: usize, row: usize, column: usize, value: T) {
         let index = depth * self.rows * self.columns + row * self.columns + column;
         self.data[index] = value;
+    }
+
+    fn get(&self, depth: usize, row: usize, column: usize) -> Option<&T> {
+        if depth < self.depth && row < self.rows && column < self.columns {
+            self.data.get(depth * self.rows * self.columns + row * self.columns + column)
+        } else {
+            None
+        }
     }
 }
