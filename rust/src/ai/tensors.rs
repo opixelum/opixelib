@@ -1,6 +1,6 @@
 pub struct Tensor<T> {
-    data: Vec<T>,
-    shape: Vec<usize>,
+    pub data: Vec<T>,
+    pub shape: Vec<usize>,
 }
 
 impl<T> Tensor<T>
