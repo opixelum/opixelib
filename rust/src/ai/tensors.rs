@@ -14,9 +14,7 @@ where
             shape,
         }
     }
-}
 
-impl<T> Tensor<T> {
     fn calculate_index(&self, indices: &[usize]) -> Option<usize> {
         if indices.len() != self.shape.len() {
             return None;
