@@ -1,6 +1,6 @@
 use crate::ai::tensors::Tensor;
 
-trait Layer<T> {
+pub trait Layer<T> {
     fn forward(&self, input: &Tensor<T>) -> Tensor<T>;
     // TODO: Add backpropagation
 }
