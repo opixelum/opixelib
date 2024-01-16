@@ -1,7 +1,7 @@
 use crate::ai::{data::Dataset, layers::Layer, tensors::Tensor};
 
 pub trait Model<T> {
-    fn train(&mut self, dataset: &Dataset<T>, epochs: usize, learning_rate: f64);
+    fn train(&mut self, dataset: &dyn Dataset<T>, epochs: usize, learning_rate: f64);
     fn predict(&self, input: &Tensor<T>) -> Tensor<T>;
 }
 
