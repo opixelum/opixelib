@@ -1,12 +1,168 @@
-pub struct Dataset<T> {
-    features: Vec<T>,
-    labels: Vec<T>,
+use crate::ai::tensors::Tensor;
+use image::{io::Reader as ImageReader, GenericImageView, Pixel};
+
+pub fn image_to_tensor(path: &str) -> Tensor<f64> {
+    // Load the image from the given path
+    let img = ImageReader::open(path)
+        .expect("Failed to open image")
+        .decode()
+        .expect("Failed to decode image");
+
+    let (width, height) = img.dimensions();
+    let color_channels = 4; // For RGBA data
+
+    // Prepare the data vector and fill it with pixel values
+    let mut data = Vec::with_capacity((width * height * color_channels) as usize);
+    for (_, _, pixel) in img.pixels() {
+        // Get rgba values
+        let rgba = pixel.to_rgba();
+
+        // Normalize pixel values and push to data vector
+        data.push(rgba[0] as f64);
+        data.push(rgba[1] as f64);
+        data.push(rgba[2] as f64);
+        data.push(rgba[3] as f64);
+    }
+
+    Tensor {
+        data,
+        shape: vec![height as usize, width as usize, color_channels as usize],
+    }
 }
 
-impl<T> Dataset<T> {
-    // fn new(path: &str) -> Self {
-    //     // Read images from the folder, convert them to tensors
-    //     // For simplicity, labels could be inferred from folder structure or separate files
-    //     // Return a Dataset containing feature tensors and label tensors
-    // }
+pub trait Dataset<T> {
+    fn next_batch(&mut self, batch_size: usize) -> Vec<T>;
+    // Placeholder for other common methods like shuffling, splitting, etc.
+}
+
+// pub struct ImageDataset<T> {
+//     features: Vec<Tensor<T>>,
+//     labels: Vec<Tensor<T>>,
+//     current_index: usize, // To keep track of the current position for batching
+// }
+//
+// impl<T> ImageDataset<T> {
+//     pub fn new(path: &str) -> Self {
+//         // Read data and labels from the folder, converting them to tensors
+//         // For this example, we're using dummy data
+//         let features = vec![/* tensors representing your features */];
+//         let labels = vec![/* tensors representing your labels */];
+//
+//         ImageDataset {
+//             features,
+//             labels,
+//             current_index: 0,
+//         }
+//     }
+// }
+//
+// impl<T> Dataset<(Tensor<T>, Tensor<T>)> for ImageDataset<T> {
+//     fn next_batch(&mut self, batch_size: usize) -> Vec<(Tensor<T>, Tensor<T>)> {
+//         let mut batch = Vec::new();
+//
+//         for _ in 0..batch_size {
+//             if self.current_index >= self.features.len() {
+//                 break; // Stop if we reach the end of the dataset
+//             }
+//
+//             let feature = self.features[self.current_index].clone();
+//             let label = self.labels[self.current_index].clone();
+//             batch.push((feature, label));
+//
+//             self.current_index += 1;
+//         }
+//
+//         // Reset current_index if end of dataset is reached
+//         if self.current_index >= self.features.len() {
+//             self.current_index = 0;
+//         }
+//
+//         batch
+//     }
+//
+//     // Placeholder for other methods like shuffle, split, etc.
+// }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_image_to_tensor() {
+        // 2x2 white square
+        let tensor = image_to_tensor("data/images/2x2-white-square.png");
+        assert_eq!(tensor.shape, vec![2, 2, 4]);
+        for i in 0..2 {
+            for j in 0..2 {
+                let r = tensor.get(&[i, j, 0]).unwrap();
+                let g = tensor.get(&[i, j, 1]).unwrap();
+                let b = tensor.get(&[i, j, 2]).unwrap();
+                let a = tensor.get(&[i, j, 3]).unwrap();
+
+                // All channels should be high
+                assert_eq!(r, &255.0);
+                assert_eq!(g, &255.0);
+                assert_eq!(b, &255.0);
+                assert_eq!(a, &255.0);
+            }
+        }
+
+        // 3x3 red square
+        let tensor = image_to_tensor("data/images/3x3-red-square.png");
+        assert_eq!(tensor.shape, vec![3, 3, 4]);
+        for i in 0..3 {
+            for j in 0..3 {
+                let r = tensor.get(&[i, j, 0]).unwrap();
+                let g = tensor.get(&[i, j, 1]).unwrap();
+                let b = tensor.get(&[i, j, 2]).unwrap();
+                let a = tensor.get(&[i, j, 3]).unwrap();
+
+                // Red and alpha channel should be high, green and blue channels should be zero
+                assert_eq!(r, &255.0);
+                assert_eq!(g, &0.0);
+                assert_eq!(b, &0.0);
+                assert_eq!(a, &255.0);
+            }
+        }
+
+        // 5x5 alternating red, green, and blue square
+        let tensor = image_to_tensor("data/images/5x5-rgb-square.png");
+        assert_eq!(tensor.shape, vec![5, 5, 4]);
+        for i in 0..5 {
+            for j in 0..5 {
+                let r = tensor.get(&[i, j, 0]).unwrap();
+                let g = tensor.get(&[i, j, 1]).unwrap();
+                let b = tensor.get(&[i, j, 2]).unwrap();
+                let a = tensor.get(&[i, j, 3]).unwrap();
+
+                // Calculate the expected color based on row and column
+                let expected_color = match (i, j % 3) {
+                    (0, 0) | (1, 1) | (2, 2) | (3, 0) | (4, 1) => ("red", &255.0, &0.0, &0.0),
+                    (0, 1) | (1, 2) | (2, 0) | (3, 1) | (4, 2) => ("green", &0.0, &255.0, &0.0),
+                    (0, 2) | (1, 0) | (2, 1) | (3, 2) | (4, 0) => ("blue", &0.0, &0.0, &255.0),
+                    _ => panic!("Invalid color pattern"),
+                };
+
+                match expected_color {
+                    ("red", er, eg, eb) => {
+                        assert_eq!(r, er);
+                        assert_eq!(g, eg);
+                        assert_eq!(b, eb);
+                    }
+                    ("green", er, eg, eb) => {
+                        assert_eq!(r, er);
+                        assert_eq!(g, eg);
+                        assert_eq!(b, eb);
+                    }
+                    ("blue", er, eg, eb) => {
+                        assert_eq!(r, er);
+                        assert_eq!(g, eg);
+                        assert_eq!(b, eb);
+                    }
+                    _ => (),
+                }
+                assert_eq!(a, &255.0);
+            }
+        }
+    }
 }
