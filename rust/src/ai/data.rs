@@ -177,6 +177,39 @@ mod tests {
                 assert_eq!(a, &255.0);
             }
         }
+
+        // 4x2 gradient red rectangle
+        let tensor = image_to_tensor("data/images/4x2-gradient-red-rectangle.png");
+        assert_eq!(tensor.shape, vec![2, 4, 4]);
+        for i in 0..2 {
+            for j in 0..4 {
+                let r = tensor.get(&[i, j, 0]).unwrap();
+                let g = tensor.get(&[i, j, 1]).unwrap();
+                let b = tensor.get(&[i, j, 2]).unwrap();
+                let a = tensor.get(&[i, j, 3]).unwrap();
+
+                // Calculate the expected color based on row and column
+                let expected_color = match (i, j) {
+                    (0, 0) | (0, 1) | (0, 2) | (0, 3) => ("light red", &255.0, &0.0, &0.0),
+                    (1, 0) | (1, 1) | (1, 2) | (1, 3) => ("dark red", &125.0, &0.0, &0.0),
+                    _ => panic!("Invalid color pattern"),
+                };
+
+                match expected_color {
+                    ("light red", er, eg, eb) => {
+                        assert_eq!(r, er);
+                        assert_eq!(g, eg);
+                        assert_eq!(b, eb);
+                    }
+                    ("dark red", er, eg, eb) => {
+                        assert_eq!(r, er);
+                        assert_eq!(g, eg);
+                        assert_eq!(b, eb);
+                    }
+                    _ => (),
+                }
+            }
+        }
     }
 
     #[test]
