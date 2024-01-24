@@ -30,6 +30,19 @@ pub fn image_to_tensor(path: &str) -> Tensor<f64> {
     }
 }
 
+pub fn label_to_tensor(label: &str) -> Tensor<f64> {
+    let mut data = Vec::with_capacity(label.len());
+
+    for character in label.chars() {
+        data.push(character as u32 as f64);
+    }
+
+    Tensor {
+        data,
+        shape: vec![label.len()],
+    }
+}
+
 pub trait Dataset<T> {
     fn next_batch(&mut self, batch_size: usize) -> Vec<T>;
     // Placeholder for other common methods like shuffling, splitting, etc.
@@ -164,5 +177,28 @@ mod tests {
                 assert_eq!(a, &255.0);
             }
         }
+    }
+
+    #[test]
+    fn test_label_to_tensor() {
+        let tensor = label_to_tensor("0");
+        assert_eq!(tensor.data, vec![48.0]);
+        assert_eq!(tensor.shape, vec![1]);
+
+        let tensor = label_to_tensor("cat");
+        assert_eq!(tensor.data, vec![99.0, 97.0, 116.0]);
+        assert_eq!(tensor.shape, vec![3]);
+
+        let tensor = label_to_tensor("parastratiosphecomyia stratiosphecomyioides");
+        assert_eq!(
+            tensor.data,
+            vec![
+                112.0, 97.0, 114.0, 97.0, 115.0, 116.0, 114.0, 97.0, 116.0, 105.0, 111.0, 115.0,
+                112.0, 104.0, 101.0, 99.0, 111.0, 109.0, 121.0, 105.0, 97.0, 32.0, 115.0, 116.0,
+                114.0, 97.0, 116.0, 105.0, 111.0, 115.0, 112.0, 104.0, 101.0, 99.0, 111.0, 109.0,
+                121.0, 105.0, 111.0, 105.0, 100.0, 101.0, 115.0
+            ]
+        );
+        assert_eq!(tensor.shape, vec![43]);
     }
 }
