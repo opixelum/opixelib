@@ -1,6 +1,51 @@
 use num_traits::cast::NumCast;
 use std::ops::{Add, AddAssign, Div, Mul};
 
+pub struct Matrix<T> {
+    pub data: Vec<T>,
+    pub shape: Vec<usize>,
+}
+
+impl<T> Matrix<T>
+where
+    T: Default + Clone,
+{
+    pub fn new(shape: Vec<usize>) -> Matrix<T> {
+        let total_size = shape.iter().product();
+        Matrix {
+            data: vec![T::default(); total_size],
+            shape,
+        }
+    }
+
+    fn calculate_index(&self, indices: &[usize]) -> Option<usize> {
+        if indices.len() != self.shape.len() {
+            return None;
+        }
+        let mut index = 0;
+        let mut multiplier = 1;
+        for (i, &dim_index) in indices.iter().rev().enumerate() {
+            if dim_index >= self.shape[self.shape.len() - 1 - i] {
+                return None;
+            }
+            index += dim_index * multiplier;
+            multiplier *= self.shape[self.shape.len() - 1 - i];
+        }
+        Some(index)
+    }
+
+    pub fn get(&self, indices: &[usize]) -> Option<&T> {
+        let index = self.calculate_index(indices)?;
+        self.data.get(index)
+    }
+
+    pub fn set(&mut self, indices: &[usize], value: T) -> Result<(), &'static str> {
+        let index = self.calculate_index(indices).ok_or("Invalid indices")?;
+        self.data[index] = value;
+        Ok(())
+    }
+}
+
 pub fn pairwise_operation<T, F>(a: &[T], b: &[T], mut operator: F) -> Vec<Vec<T>>
 where
     T: Clone + Default,
@@ -58,6 +103,54 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn test_new_matrixes() {
+        let matrix_1d: Matrix<u8> = Matrix::new(vec![3]);
+        assert_eq!(matrix_1d.data, vec![0, 0, 0]);
+        assert_eq!(matrix_1d.shape, vec![3]);
+
+        let matrix_2d: Matrix<u8> = Matrix::new(vec![2, 3]);
+        assert_eq!(matrix_2d.data, vec![0, 0, 0, 0, 0, 0]);
+        assert_eq!(matrix_2d.shape, vec![2, 3]);
+
+        let matrix_3d: Matrix<u8> = Matrix::new(vec![2, 2, 2]);
+        assert_eq!(matrix_3d.data, vec![0, 0, 0, 0, 0, 0, 0, 0]);
+        assert_eq!(matrix_3d.shape, vec![2, 2, 2]);
+    }
+
+    #[test]
+    fn test_calculate_index_matrixes() {
+        let matrix_1d = Matrix::<u8>::new(vec![3]);
+        assert_eq!(matrix_1d.calculate_index(&[2]), Some(2));
+        assert_eq!(matrix_1d.calculate_index(&[3]), None); // Out of bounds
+
+        let matrix_2d = Matrix::<u8>::new(vec![2, 3]);
+        assert_eq!(matrix_2d.calculate_index(&[1, 2]), Some(5));
+        assert_eq!(matrix_2d.calculate_index(&[2, 2]), None); // Out of bounds
+
+        let matrix_3d = Matrix::<u8>::new(vec![2, 2, 2]);
+        assert_eq!(matrix_3d.calculate_index(&[1, 1, 1]), Some(7));
+        assert_eq!(matrix_3d.calculate_index(&[2, 2, 2]), None); // Out of bounds
+    }
+
+    #[test]
+    fn test_set_get_matrixes() {
+        let mut matrix_1d = Matrix::<u8>::new(vec![3]);
+        assert!(matrix_1d.set(&[1], 5).is_ok());
+        assert_eq!(matrix_1d.get(&[1]), Some(&5));
+        assert!(matrix_1d.set(&[3], 6).is_err()); // Out of bounds
+
+        let mut matrix_2d = Matrix::<u8>::new(vec![2, 3]);
+        assert!(matrix_2d.set(&[0, 2], 7).is_ok());
+        assert_eq!(matrix_2d.get(&[0, 2]), Some(&7));
+        assert!(matrix_2d.set(&[2, 2], 8).is_err()); // Out of bounds
+
+        let mut matrix_3d = Matrix::<u8>::new(vec![2, 2, 2]);
+        assert!(matrix_3d.set(&[1, 1, 1], 9).is_ok());
+        assert_eq!(matrix_3d.get(&[1, 1, 1]), Some(&9));
+        assert!(matrix_3d.set(&[2, 2, 2], 10).is_err()); // Out of bounds
+    }
 
     #[test]
     fn test_convolution() {
