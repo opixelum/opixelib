@@ -35,6 +35,7 @@ where
     }
 }
 
+/*
 impl<T> Layer<T> for Dense<T>
 where
     T: Default + Clone + Add<Output = T> + Mul<Output = T> + Sum, // other necessary traits
@@ -45,6 +46,7 @@ where
         // Return the resulting tensor
     }
 }
+*/
 
 #[cfg(test)]
 mod tests {
