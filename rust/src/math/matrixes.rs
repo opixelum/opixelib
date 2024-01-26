@@ -35,6 +35,7 @@ where
 
     result
 }
+
 pub fn convolution<T>(f: &[T], g: &[T]) -> Vec<T>
 where
     T: Mul<Output = T> + Add<Output = T> + AddAssign + Clone + Default,
