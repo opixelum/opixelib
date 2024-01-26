@@ -1,4 +1,5 @@
 use num_traits::cast::NumCast;
+use std::iter::Sum;
 use std::ops::{Add, AddAssign, Div, Mul};
 
 pub struct Matrix<T> {
@@ -44,6 +45,29 @@ where
         self.data[index] = value;
         Ok(())
     }
+}
+
+pub fn matrix_multiply<T>(a: &Matrix<T>, b: &Matrix<T>) -> Result<Matrix<T>, &'static str>
+where
+    T: Default + Clone + Add<Output = T> + Mul<Output = T> + Sum,
+{
+    if a.shape[1] != b.shape[0] {
+        return Err("Dimension mismatch for matrix multiplication");
+    }
+
+    let mut result = Matrix::new(vec![a.shape[0], b.shape[1]]);
+
+    for i in 0..a.shape[0] {
+        for j in 0..b.shape[1] {
+            let mut sum = T::default(); // Assuming T supports Default trait
+            for k in 0..a.shape[1] {
+                sum = sum + a.get(&[i, k]).unwrap().clone() * b.get(&[k, j]).unwrap().clone();
+            }
+            result.set(&[i, j], sum)?;
+        }
+    }
+
+    Ok(result)
 }
 
 pub fn pairwise_operation<T, F>(a: &[T], b: &[T], mut operator: F) -> Matrix<T>
@@ -176,5 +200,20 @@ mod test {
         assert_eq!(average(&[1.0, 1.0, 1.0]), 1.0);
         assert_eq!(average(&[0, 20]), 10);
         assert_eq!(average(&[-10.0, 10.0]), 0.0);
+    }
+
+    #[test]
+    fn test_matrix_multiply() {
+        let a = Matrix {
+            data: vec![1, 2, 3, 4, 5, 6],
+            shape: vec![2, 3],
+        };
+        let b = Matrix {
+            data: vec![7, 8, 9, 10, 11, 12],
+            shape: vec![3, 2],
+        };
+        let result = matrix_multiply(&a, &b).unwrap();
+        assert_eq!(result.data, vec![58, 64, 139, 154]);
+        assert_eq!(result.shape, vec![2, 2]);
     }
 }
