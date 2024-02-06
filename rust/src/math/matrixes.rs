@@ -246,6 +246,7 @@ mod test {
 
     #[test]
     fn test_matrix_multiplication() {
+        // Should work
         let a = Matrix {
             data: vec![1, 2, 3, 4, 5, 6],
             shape: vec![2, 3],
@@ -257,5 +258,13 @@ mod test {
         let result = matrix_multiplication(&a, &b).unwrap();
         assert_eq!(result.data, vec![58, 64, 139, 154]);
         assert_eq!(result.shape, vec![2, 2]);
+
+        // Should fail due to dimension mismatch
+        let c = Matrix {
+            data: vec![1, 2, 3, 4],
+            shape: vec![2, 2],
+        };
+        let result = matrix_multiplication(&a, &c);
+        assert_eq!(result, Err("Dimension mismatch for matrix multiplication"));
     }
 }
