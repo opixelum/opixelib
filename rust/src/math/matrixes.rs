@@ -48,7 +48,7 @@ where
     }
 }
 
-pub fn matrix_addition<T>(a: &Matrix<T>, b: &Matrix<T>) -> Result<Matrix<T>, &'static str>
+pub fn sum<T>(a: &Matrix<T>, b: &Matrix<T>) -> Result<Matrix<T>, &'static str>
 where
     T: Default + Clone + Add<Output = T> + Mul<Output = T> + Sum,
 {
@@ -62,10 +62,10 @@ where
         result.data[i] = a_elem.clone() + b_elem.clone();
     }
 
-    return Ok(result);
+    Ok(result)
 }
 
-pub fn matrix_multiplication<T>(a: &Matrix<T>, b: &Matrix<T>) -> Result<Matrix<T>, &'static str>
+pub fn mul<T>(a: &Matrix<T>, b: &Matrix<T>) -> Result<Matrix<T>, &'static str>
 where
     T: Default + Clone + Add<Output = T> + Mul<Output = T> + Sum,
 {
@@ -221,7 +221,7 @@ mod test {
     }
 
     #[test]
-    fn test_matrix_addition() {
+    fn test_sum() {
         // Should work
         let a = Matrix {
             data: vec![1, 2, 3, 4, 5, 6],
@@ -231,7 +231,7 @@ mod test {
             data: vec![7, 8, 9, 10, 11, 12],
             shape: vec![2, 3],
         };
-        let result = matrix_addition(&a, &b).unwrap();
+        let result = sum(&a, &b).unwrap();
         assert_eq!(result.data, vec![8, 10, 12, 14, 16, 18]);
         assert_eq!(result.shape, vec![2, 3]);
 
@@ -240,12 +240,12 @@ mod test {
             data: vec![1, 2, 3, 4],
             shape: vec![2, 2],
         };
-        let result = matrix_addition(&a, &c);
+        let result = sum(&a, &c);
         assert_eq!(result, Err("Dimension mismatch for matrix addition"));
     }
 
     #[test]
-    fn test_matrix_multiplication() {
+    fn test_mul() {
         // Should work
         let a = Matrix {
             data: vec![1, 2, 3, 4, 5, 6],
@@ -255,7 +255,7 @@ mod test {
             data: vec![7, 8, 9, 10, 11, 12],
             shape: vec![3, 2],
         };
-        let result = matrix_multiplication(&a, &b).unwrap();
+        let result = mul(&a, &b).unwrap();
         assert_eq!(result.data, vec![58, 64, 139, 154]);
         assert_eq!(result.shape, vec![2, 2]);
 
@@ -264,7 +264,7 @@ mod test {
             data: vec![1, 2, 3, 4],
             shape: vec![2, 2],
         };
-        let result = matrix_multiplication(&a, &c);
+        let result = mul(&a, &c);
         assert_eq!(result, Err("Dimension mismatch for matrix multiplication"));
     }
 }
