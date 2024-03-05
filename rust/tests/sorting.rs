@@ -1,15 +1,16 @@
 use opixelib::sorting::*;
+use std::f64::consts::PI;
 
 // Define your unsorted test data as static arrays or slices
 static INT_ARRAY: [i32; 9] = [7, 3, 9, 1, 5, 4, 2, 8, 6];
-static FLOAT_ARRAY: [f64; 4] = [3.14, 2.71, 1.41, 1.73];
+static FLOAT_ARRAY: [f64; 4] = [PI, 2.71, 1.41, 1.73];
 static CHAR_ARRAY: [char; 4] = ['d', 'a', 'c', 'b'];
 static STRING_SLICE_ARRAY: [&str; 4] = ["john", "alex", "chris", "ben"];
 static STRING_ARRAY: [&str; 4] = ["o'neil", "johnson", "hilton", "doe"];
 
 // Define your sorted test data
 static SORTED_INT_ARRAY: [i32; 9] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-static SORTED_FLOAT_ARRAY: [f64; 4] = [1.41, 1.73, 2.71, 3.14];
+static SORTED_FLOAT_ARRAY: [f64; 4] = [1.41, 1.73, 2.71, PI];
 static SORTED_CHAR_ARRAY: [char; 4] = ['a', 'b', 'c', 'd'];
 static SORTED_STRING_SLICE_ARRAY: [&str; 4] = ["alex", "ben", "chris", "john"];
 static SORTED_STRING_ARRAY: [&str; 4] = ["doe", "hilton", "johnson", "o'neil"];
