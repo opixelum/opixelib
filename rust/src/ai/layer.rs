@@ -1,4 +1,4 @@
-use crate::ai::tensors::Tensor;
+use crate::ai::tensor::Tensor;
 use std::iter::Sum;
 use std::ops::{Add, Mul};
 

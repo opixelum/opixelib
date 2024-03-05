@@ -1,4 +1,4 @@
-use crate::ai::tensors::Tensor;
+use crate::ai::tensor::Tensor;
 use image::{io::Reader as ImageReader, GenericImageView, Pixel};
 
 pub fn image_to_tensor(path: &str) -> Tensor<f64> {

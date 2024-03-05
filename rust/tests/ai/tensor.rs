@@ -1,4 +1,4 @@
-use opixelib::ai::tensors::*;
+use opixelib::ai::tensor::*;
 
 #[test]
 fn test_new_tensors() {

@@ -1,4 +1,4 @@
-use crate::ai::{data::Dataset, layers::Layer, tensors::Tensor};
+use crate::ai::{data::Dataset, layer::Layer, tensor::Tensor};
 
 pub trait Model<T> {
     fn train(&mut self, dataset: &dyn Dataset<T>, epochs: usize, learning_rate: f64);

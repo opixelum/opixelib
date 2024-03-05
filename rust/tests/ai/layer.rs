@@ -1,5 +1,5 @@
-use opixelib::ai::layers::*;
-use opixelib::ai::tensors::Tensor;
+use opixelib::ai::layer::*;
+use opixelib::ai::tensor::Tensor;
 
 #[test]
 fn test_flatten_forward() {

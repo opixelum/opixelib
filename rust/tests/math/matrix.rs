@@ -1,4 +1,4 @@
-use opixelib::math::matrixes::*;
+use opixelib::math::matrix::*;
 
 #[test]
 fn test_new_matrixes() {

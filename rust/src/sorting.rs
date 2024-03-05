@@ -1,4 +1,4 @@
-use crate::arrays::{copy_arrays, merge_arrays};
+use crate::array::{copy_arrays, merge_arrays};
 
 pub fn insertion_sort<T: PartialOrd + Clone>(array: &mut [T]) {
     let size = array.len();

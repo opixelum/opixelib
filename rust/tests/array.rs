@@ -1,4 +1,4 @@
-use opixelib::arrays::*;
+use opixelib::array::*;
 
 // Define test data for different types
 static LEFT_INT_ARRAY: [i32; 5] = [0, 1, 2, 3, 4];

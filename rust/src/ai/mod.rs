@@ -1,7 +1,8 @@
-pub mod activations;
+pub mod activation;
 pub mod data;
-pub mod layers;
-pub mod losses;
-pub mod models;
-pub mod optimizers;
-pub mod tensors;
+pub mod layer;
+pub mod loss;
+pub mod model;
+pub mod neuron;
+pub mod optimizer;
+pub mod tensor;

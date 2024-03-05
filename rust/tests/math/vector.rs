@@ -1,4 +1,4 @@
-use opixelib::math::vectors::*;
+use opixelib::math::vector::*;
 
 #[test]
 fn test_sum() {
@@ -15,10 +15,10 @@ fn test_sum() {
 
 #[test]
 fn test_dot() {
-    assert_eq!(dot(&[1, 2, 3], &[4, 5, 6]), Ok(32));
-    assert_eq!(dot(&[1.0, 2.0, 3.0], &[4.0, 5.0, 6.0]), Ok(32.0));
+    assert_eq!(dot(&vec![1, 2, 3], &vec![4, 5, 6]), Ok(32));
+    assert_eq!(dot(&vec![1.0, 2.0, 3.0], &vec![4.0, 5.0, 6.0]), Ok(32.0));
     assert_eq!(
-        dot(&[1, 2, 3], &[4, 5]),
+        dot(&vec![1, 2, 3], &vec![4, 5]),
         Err("Vectors must be of the same size")
     );
 }

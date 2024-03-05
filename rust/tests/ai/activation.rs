@@ -1,4 +1,4 @@
-use opixelib::ai::activations::*;
+use opixelib::ai::activation::*;
 
 #[test]
 fn test_relu() {

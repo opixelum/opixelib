@@ -1,5 +1,5 @@
 pub mod ai;
-pub mod arrays;
+pub mod array;
 pub mod math;
 pub mod queue;
 pub mod searching;
