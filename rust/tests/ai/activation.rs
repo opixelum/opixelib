@@ -45,3 +45,10 @@ fn test_softmax() {
         ]
     );
 }
+
+#[test]
+fn test_heavyside() {
+    assert_eq!(heavyside(-1.0), 0.0);
+    assert_eq!(heavyside(0.0), 1.0);
+    assert_eq!(heavyside(1.0), 1.0);
+}
