@@ -1,20 +1,19 @@
+use opixelib::ai::activation::*;
 use opixelib::ai::layer::*;
-use opixelib::ai::tensor::Tensor;
+use opixelib::ai::neuron::Neuron;
 
 #[test]
-fn test_flatten_forward() {
-    let mut input = Tensor::<u8>::new(vec![2, 2, 2]);
-    input
-        .set(&[0, 0, 0], 55)
-        .expect("Failed to set flatten input");
-    input
-        .set(&[0, 1, 0], 55)
-        .expect("Failed to set flatten input");
-    input
-        .set(&[1, 1, 1], 55)
-        .expect("Failed to set flatten input");
+fn test_layer_forward() {
+    let neuron: Neuron = Neuron {
+        inputs: vec![1.0, 2.0, 3.0],
+        weights: vec![4.0, 5.0, 6.0],
+        bias: 10.0,
+    };
 
-    let output = Flatten.forward(&input);
-    assert_eq!(output.data, vec![55, 0, 55, 0, 0, 0, 0, 55]);
-    assert_eq!(output.shape, vec![8]);
+    let perceptron = Layer {
+        neurons: vec![neuron],
+        activation: heavyside,
+    };
+
+    assert_eq!(perceptron.forward(), vec![1.0])
 }
