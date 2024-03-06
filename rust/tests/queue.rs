@@ -17,14 +17,14 @@ static FULL_INT_QUEUE: Lazy<Queue<i8>> = Lazy::new(|| Queue {
 
 #[test]
 fn test_is_empty() {
-    assert_eq!(EMPTY_QUEUE.is_empty(), true);
-    assert_eq!(FULL_INT_QUEUE.is_empty(), false);
+    assert!(EMPTY_QUEUE.is_empty());
+    assert!(!FULL_INT_QUEUE.is_empty());
 }
 
 #[test]
 fn test_is_full() {
-    assert_eq!(EMPTY_QUEUE.is_full(), false);
-    assert_eq!(FULL_INT_QUEUE.is_full(), true);
+    assert!(!EMPTY_QUEUE.is_full());
+    assert!(FULL_INT_QUEUE.is_full());
 }
 
 #[test]

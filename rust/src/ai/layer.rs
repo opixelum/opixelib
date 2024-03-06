@@ -1,4 +1,4 @@
-use crate::ai::activation::*;
+use crate::ai::activation::Activation;
 use crate::ai::neuron::Neuron;
 
 pub struct Layer {

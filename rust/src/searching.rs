@@ -23,5 +23,5 @@ pub fn binary_search<T: PartialOrd + Clone + Display>(
         }
     }
 
-    return Err(format!("{} not found in array", target));
+    Err(format!("{} not found in array", target))
 }

@@ -86,7 +86,6 @@ fn test_image_to_tensor() {
             let r = tensor.get(&[i, j, 0]).unwrap();
             let g = tensor.get(&[i, j, 1]).unwrap();
             let b = tensor.get(&[i, j, 2]).unwrap();
-            let a = tensor.get(&[i, j, 3]).unwrap();
 
             // Calculate the expected color based on row and column
             let expected_color = match (i, j) {
