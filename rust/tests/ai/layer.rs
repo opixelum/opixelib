@@ -12,7 +12,7 @@ fn test_layer_forward() {
 
     let perceptron = Layer {
         neurons: vec![neuron],
-        activation: heavyside,
+        activation: binary_step,
     };
 
     assert_eq!(perceptron.forward(), vec![1.0])
