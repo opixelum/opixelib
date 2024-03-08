@@ -14,7 +14,7 @@ where
 }
 
 /// Calculates the dot product of two vectors of the same size, returning an error if sizes differ.
-pub fn dot<T>(a: &Vec<T>, b: &Vec<T>) -> Result<T, &'static str>
+pub fn dot<T>(a: Vec<T>, b: Vec<T>) -> Result<T, &'static str>
 where
     T: Mul<Output = T> + Add<Output = T> + Sum<T> + Copy,
 {
