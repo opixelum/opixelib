@@ -1,13 +1,18 @@
 use crate::math::vector::dot;
 
+#[derive(Debug, PartialEq)]
 pub struct Neuron {
-    pub inputs: Vec<f64>,
-    pub weights: Vec<f64>,
+    pub weights: Option<Vec<f64>>,
     pub bias: f64,
 }
 
 impl Neuron {
-    pub fn forward(&self) -> f64 {
-        dot(&self.inputs, &self.weights).unwrap() + self.bias
+    fn forward(&self, inputs: Vec<f64>) -> f64 {
+        dot(
+            inputs,
+            self.weights.clone().expect("Weights are not initialized."),
+        )
+        .unwrap()
+            + self.bias
     }
 }
