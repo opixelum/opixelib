@@ -43,13 +43,24 @@ Contains all types of layer used in neural networks.
 
 Contains all loss functions.
 
-- [ ] MSE
-- [ ] MAE
-- [ ] XC
+- [ ] Binary Cross-Entropy
+- [ ] Binary Focal Cross-Entropy
+- [ ] Categorical Hinge
+- [ ] Cosine Similarity
+- [ ] Hinge
+- [ ] Huber
+- [ ] Kullback-Leibler Divergence
+- [ ] Log-Cosh
+- [ ] Mean Absolute Error
+- [ ] Mean Absolute Percentage Error
+- [ ] Mean Squared Error
+- [ ] Mean Squared Logarithmic Error
+- [ ] Poisson
+- [ ] Sparse Cross-Entropy
 
 ### Model
 
-Contains functions for defining and compiling neural networks.
+Contains functions for defining and fitting neural networks.
 
 ### Neuron
 
