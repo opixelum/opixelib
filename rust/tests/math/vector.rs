@@ -9,7 +9,7 @@ fn test_sum() {
     );
     assert_eq!(
         sum(&[1, 2, 3], &[4, 5]),
-        Err("Vectors must be of the same size")
+        Err("Vectors must be of the same size.")
     );
 }
 
@@ -19,6 +19,6 @@ fn test_dot() {
     assert_eq!(dot(vec![1.0, 2.0, 3.0], vec![4.0, 5.0, 6.0]), Ok(32.0));
     assert_eq!(
         dot(vec![1, 2, 3], vec![4, 5]),
-        Err("Vectors must be of the same size")
+        Err("Vectors must be of the same size.")
     );
 }
