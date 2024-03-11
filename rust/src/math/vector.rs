@@ -7,7 +7,7 @@ where
     T: Add<Output = T> + Copy,
 {
     if a.len() != b.len() {
-        Err("Vectors must be of the same size")
+        Err("Vectors must be of the same size.")
     } else {
         Ok(a.iter().zip(b.iter()).map(|(a, b)| *a + *b).collect())
     }
@@ -19,7 +19,7 @@ where
     T: Mul<Output = T> + Add<Output = T> + Sum<T> + Copy,
 {
     if a.len() != b.len() {
-        Err("Vectors must be of the same size")
+        Err("Vectors must be of the same size.")
     } else {
         Ok(a.iter().zip(b.iter()).map(|(x, y)| *x * *y).sum())
     }
