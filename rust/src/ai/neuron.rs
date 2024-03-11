@@ -7,7 +7,7 @@ pub struct Neuron {
 }
 
 impl Neuron {
-    fn forward(&self, inputs: Vec<f64>) -> f64 {
+    pub fn forward(&self, inputs: Vec<f64>) -> f64 {
         dot(
             inputs,
             self.weights.clone().expect("Weights are not initialized."),
