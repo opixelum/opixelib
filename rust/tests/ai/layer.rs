@@ -4,9 +4,8 @@ use opixelib::ai::neuron::Neuron;
 
 #[test]
 fn test_new() {
-    let perceptron = Layer::new(1, binary_step);
     assert_eq!(
-        perceptron,
+        Layer::new(1, binary_step),
         Layer {
             neurons: vec![Neuron {
                 weights: None,
@@ -14,5 +13,12 @@ fn test_new() {
             }],
             activation: binary_step
         }
-    )
+    );
+}
+
+#[test]
+fn test_forward() {
+    let mut perceptron = Layer::new(1, binary_step);
+    assert_eq!(perceptron.forward(vec![1.0, 2.0]), vec![1.0]);
+    assert_eq!(perceptron.forward(vec![-1.0, -2.0]), vec![0.0])
 }

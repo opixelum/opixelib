@@ -22,17 +22,16 @@ impl Layer {
         }
     }
 
-    // fn forward(&self, inputs: Vec<f64>) -> Vec<f64> {
-    //    self.neurons
-    //        .iter()
-    //        .enumerate()
-    //        .map(|(i, neuron)| {
-    //            if neuron.weights.is_none() {
-    //                self.neurons[i].weights = Some(vec![0.5; inputs.len()]);
-    //            }
+    pub fn forward(&mut self, inputs: Vec<f64>) -> Vec<f64> {
+        let mut outputs = vec![];
 
-    //            neuron.forward(inputs.clone())
-    //        })
-    //        .collect()
-    //}
+        for neuron in self.neurons.iter_mut() {
+            if neuron.weights.is_none() {
+                neuron.weights = Some(vec![1.0; inputs.len()])
+            }
+            outputs.push((self.activation)(neuron.forward(inputs.clone())))
+        }
+
+        outputs
+    }
 }
