@@ -1,3 +1,5 @@
+use std::f32::consts::E;
+
 pub type Activation = fn(f64) -> f64;
 
 pub fn relu(x: f64) -> f64 {
@@ -30,4 +32,8 @@ pub fn binary_step(x: f64) -> f64 {
     } else {
         0.0
     }
+}
+
+pub fn sigmoid(x: f64) -> f64 {
+    1.0 / (1.0 + E.powf(-x as f32)) as f64
 }

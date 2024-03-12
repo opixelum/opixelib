@@ -52,3 +52,10 @@ fn test_binary_step() {
     assert_eq!(binary_step(0.0), 1.0);
     assert_eq!(binary_step(1.0), 1.0);
 }
+
+#[test]
+fn test_sigmoid() {
+    assert_eq!(sigmoid(1.0), 0.7310586055954523);
+    assert_eq!(sigmoid(10.0), 0.9999545833234493);
+    assert_eq!(sigmoid(-5.0), 0.006692852151141873);
+}
