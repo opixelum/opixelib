@@ -22,3 +22,17 @@ fn test_dot() {
         Err("Vectors must be of the same size.")
     );
 }
+
+#[test]
+fn test_sub() {
+    assert_eq!(sub(vec![1, 2, 3], vec![1, 2, 3]), Ok(vec![0, 0, 0]));
+    assert_eq!(sub(vec![1, 2, 3], vec![1, 1, 1]), Ok(vec![0, 1, 2]));
+    assert_eq!(
+        sub(vec![1.0, 2.0, 3.0], vec![1.0, 2.0, 3.0]),
+        Ok(vec![0.0, 0.0, 0.0])
+    );
+    assert_eq!(
+        sub(vec![1, 2, 3], vec![4, 5]),
+        Err("Vectors must be of the same size.")
+    );
+}
