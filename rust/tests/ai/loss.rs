@@ -10,3 +10,9 @@ fn test_mean_squared_error() {
         2.8
     )
 }
+
+#[test]
+#[should_panic]
+fn test_mean_squared_error_different_vector_size() {
+    assert_eq!(mean_squared_error(vec![0.0, 0.0], vec![0.0]), 0.0)
+}
